@@ -1,14 +1,6 @@
 <?php
-/**
- * Admin Dashboard — overview stats, charts, recent activity.
- */
-
-require_once __DIR__ . '/../middleware/auth.php';
+require_once __DIR__ . '/../middleware/admin_only.php';
 require_once __DIR__ . '/../includes/csrf.php';
-
-if (!hasRole('admin')) {
-    redirect(url('staff/dashboard.php'));
-}
 
 $db = getDB();
 $today = date('Y-m-d');

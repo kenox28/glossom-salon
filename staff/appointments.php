@@ -1,10 +1,8 @@
 <?php
-/**
- * Staff — Appointments management (view, approve, reject).
- */
+require_once __DIR__ . '/../includes/functions.php';
 
-require_once __DIR__ . '/../middleware/auth.php';
-require_once __DIR__ . '/../includes/csrf.php';
+initSession();
+redirect(url('index.php'));
 
 $db = getDB();
 $status = sanitize($_GET['status'] ?? '');

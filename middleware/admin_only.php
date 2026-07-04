@@ -7,5 +7,5 @@ require_once __DIR__ . '/auth.php';
 
 if (!hasRole('admin')) {
     setFlash('error', 'Access denied. Administrator privileges required.');
-    redirect(url('staff/dashboard.php'));
+    redirect(url('index.php'));
 }

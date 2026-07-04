@@ -1,5 +1,7 @@
 # Glossom Salon — Apache security rules
 
+DirectoryIndex login.php
+
 # Deny direct access to config and includes
 <IfModule mod_rewrite.c>
     RewriteEngine On

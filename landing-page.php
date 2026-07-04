@@ -1,32 +1,79 @@
+<?php
+require_once __DIR__ . '/includes/functions.php';
+redirect(url('login.php'));
+?>
+<?php
+require_once __DIR__ . '/includes/functions.php';
+initSession();
+
+if (!isLoggedIn()) {
+    redirect(url('login.php'));
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prime Cuts - Premium Salon & Barbershop</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Poppins & Inter Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- GSAP -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-    
-    <!-- SplitType -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://unpkg.com/split-type@0.3.2/dist/index.js"></script>
-
+    <title>Glossom Salon</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #F233C2;
+            --dark: #1F2937;
+            --white: #FFFFFF;
         }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fff5fc, #ffffff);
+            color: var(--dark);
+            min-height: 100vh;
+            display: grid;
+            place-items: center;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 2rem 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 480px;
+            width: 90%;
+        }
+
+        h1 {
+            margin-bottom: 0.75rem;
+            color: var(--dark);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: #4b5563;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary);
+            color: var(--white);
+            text-decoration: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Welcome to Glossom Salon</h1>
+        <p>You are now logged in to the site.</p>
+        <a class="btn" href="<?= url('logout.php') ?>">Logout</a>
+    </div>
+</body>
+</html>
+<?php exit; ?>
 
         :root {
             --primary: #F233C2;

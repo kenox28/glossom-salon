@@ -10,7 +10,7 @@ initSession();
 
 // Redirect if already logged in
 if (isLoggedIn()) {
-    $dest = hasRole('admin') ? url('admin/dashboard.php') : url('staff/dashboard.php');
+    $dest = hasRole('admin') ? url('admin/dashboard.php') : url('index.php');
     redirect($dest);
 }
 
@@ -31,20 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch();
 
         if ($user && password_verify($password, $user['password'])) {
+            $role = normalizeRole($user['role'] ?? '');
+
             session_regenerate_id(true);
             $_SESSION['user_id']    = $user['id'];
             $_SESSION['username']   = $user['username'];
             $_SESSION['email']      = $user['email'];
             $_SESSION['first_name'] = $user['first_name'];
             $_SESSION['last_name']  = $user['last_name'];
-            $_SESSION['role']       = $user['role'];
+            $_SESSION['role']       = $role;
             $_SESSION['last_activity'] = time();
 
             logActivity($db, (int) $user['id'], "{$user['first_name']} logged in");
 
-            $dest = $user['role'] === 'admin'
+            $dest = $role === 'admin'
                 ? url('admin/dashboard.php')
-                : url('staff/dashboard.php');
+                : url('index.php');
             redirect($dest);
         } else {
             $error = 'Invalid username or password.';

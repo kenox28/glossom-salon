@@ -74,11 +74,19 @@ function currentUser(): ?array
 }
 
 /**
+ * Normalize a role name for consistent comparisons.
+ */
+function normalizeRole(?string $role): string
+{
+    return strtolower(trim((string) ($role ?? '')));
+}
+
+/**
  * Check if current user has a specific role.
  */
 function hasRole(string $role): bool
 {
-    return isLoggedIn() && $_SESSION['role'] === $role;
+    return isLoggedIn() && normalizeRole($_SESSION['role']) === normalizeRole($role);
 }
 
 /**
@@ -162,11 +170,17 @@ function sanitize(string $input): string
  */
 function basePath(): string
 {
-    $script = $_SERVER['SCRIPT_NAME'];
+    $script = $_SERVER['SCRIPT_NAME'] ?? '';
+    if ($script === '') {
+        return '';
+    }
+
     $dir = dirname($script);
     // Normalize for admin/staff subdirectories
     $dir = preg_replace('#/(admin|staff|api)$#', '', $dir);
-    return rtrim($dir, '/');
+    $dir = rtrim($dir, '/');
+
+    return $dir === '.' ? '' : $dir;
 }
 
 /**
@@ -174,7 +188,15 @@ function basePath(): string
  */
 function url(string $path = ''): string
 {
-    return basePath() . '/' . ltrim($path, '/');
+    if ($path === '') {
+        return APP_URL;
+    }
+
+    if (preg_match('#^(?:[a-z][a-z0-9+.-]*:)?//#i', $path) || preg_match('#^[a-z][a-z0-9+.-]*:#i', $path)) {
+        return $path;
+    }
+
+    return rtrim(APP_URL, '/') . '/' . ltrim($path, '/');
 }
 
 /**

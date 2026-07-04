@@ -1,14 +1,6 @@
 <?php
-/**
- * Admin — Appointments management page.
- */
-
-require_once __DIR__ . '/../middleware/auth.php';
+require_once __DIR__ . '/../middleware/admin_only.php';
 require_once __DIR__ . '/../includes/csrf.php';
-
-if (!hasRole('admin')) {
-    redirect(url('staff/appointments.php'));
-}
 
 $db = getDB();
 $status = sanitize($_GET['status'] ?? '');
