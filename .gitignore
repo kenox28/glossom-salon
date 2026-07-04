@@ -1,0 +1,14 @@
+# Glossom Salon — ignore rules
+
+/vendor/
+/uploads/*
+!/uploads/.gitkeep
+/config/mail.local.php
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/

@@ -1,0 +1,15 @@
+# Glossom Salon — Apache security rules
+
+# Deny direct access to config and includes
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^config/ - [F,L]
+    RewriteRule ^includes/ - [F,L]
+    RewriteRule ^middleware/ - [F,L]
+    RewriteRule ^vendor/ - [F,L]
+</IfModule>
+
+# Protect database setup after initial run (uncomment when ready)
+# <Files "database.php">
+#     Require all denied
+# </Files>
