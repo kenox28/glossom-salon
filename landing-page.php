@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prime Cuts - Premium Salon & Barbershop</title>
+    <title>Glosh Beauty Salon</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -627,7 +627,7 @@
 
         .overview-card p {
             font-size: 1rem;
-            color: #9CA3AF;
+            color: #0F1419;
         }
 
         /* Services Grid */
@@ -857,6 +857,12 @@
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid rgba(242, 51, 194, 0.1);
         }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
 
         .gallery-item:hover {
             transform: translateY(-8px) scale(1.02);
@@ -865,7 +871,7 @@
         }
 
         .gallery-item.tall {
-            grid-row: span 2;
+            grid-row: span 1;
         }
 
         .gallery-item.wide {
@@ -1456,8 +1462,9 @@
     <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
-                <h1 class="hero-headline">Premium Haircuts Crafted With Style</h1>
-                <p>Experience the art of professional grooming. Our skilled stylists bring precision, passion, and personality to every cut.</p>
+                <img src="glossom-logo.png" alt="Glosh Beauty Salon" height="100px" width="100px" class="logo-image">
+                <h1 class="hero-headline">Glosh Beauty Salon</h1>
+                <p>Experience the art of professional beauty and grooming. Our skilled stylists bring precision, passion, and personality to every service.</p>
                 <div class="hero-buttons">
                     <button class="cta-button" onclick="scrollToSection('#appointment')">Book Appointment</button>
                     <button class="secondary-button" onclick="scrollToSection('#services')">View Services</button>
@@ -1475,7 +1482,7 @@
     <section id="overview" class="alt-bg">
         <div class="section-header">
             <h2>Why Our Clients Love Us</h2>
-            <p>Setting the standard for premium barbershop experience since 2014</p>
+            <p>Setting the standard for premium barbershop experience</p>
         </div>
         <div class="overview-grid">
             <div class="overview-card fade-up">
@@ -1512,37 +1519,37 @@
                 <div class="service-icon">✂️</div>
                 <h4>Premium Haircut</h4>
                 <p>Classic cuts, fades, and modern styles executed with precision</p>
-                <div class="service-price">$35</div>
+                <div class="service-price">₱350</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">🎨</div>
                 <h4>Hair Coloring</h4>
                 <p>Expert color treatment for transformation and confidence</p>
-                <div class="service-price">$45</div>
+                <div class="service-price">₱450</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">💆</div>
                 <h4>Hair Treatment</h4>
                 <p>Deep conditioning and rejuvenation for healthy hair</p>
-                <div class="service-price">$50</div>
+                <div class="service-price">₱500</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">🧔</div>
                 <h4>Beard Grooming</h4>
                 <p>Precision beard trim, shaping, and care</p>
-                <div class="service-price">$25</div>
+                <div class="service-price">₱350</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">💇</div>
                 <h4>Hair Styling</h4>
                 <p>Professional styling for special occasions</p>
-                <div class="service-price">$40</div>
+                <div class="service-price">₱400</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">✨</div>
                 <h4>Premium Package</h4>
                 <p>Complete grooming experience with consultation</p>
-                <div class="service-price">$85</div>
+                <div class="service-price">₱1250</div>
             </div>
         </div>
     </section>
@@ -1550,7 +1557,7 @@
     <!-- Why Choose Us -->
     <section id="why" class="alt-bg">
         <div class="section-header">
-            <h2>Why Choose Prime Cuts</h2>
+            <h2>Why Choose Glosh Beauty Salon</h2>
             <p>Excellence in every detail</p>
         </div>
         <div class="features-grid">
@@ -1621,26 +1628,49 @@
         </div>
         <div class="gallery-grid">
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh1.jpg" alt="Gallery image" />
             </div>
             <div class="gallery-item tall">
+                <img src="glosh2.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
             <div class="gallery-item">
+                <img src="glosh3.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
             <div class="gallery-item">
+                <img src="glosh4.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
             <div class="gallery-item wide">
+                <img src="glosh5.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
             <div class="gallery-item">
+                <img src="glosh6.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
             <div class="gallery-item">
+                <img src="glosh7.jpg" alt="Gallery image" />
+
                 <div class="gallery-overlay">👁️</div>
             </div>
+            <div class="gallery-item">
+                <img src="glosh8.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay">👁️</div>
+            </div>
+            <div class="gallery-item">
+                <img src="glosh9.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay">👁️</div>
+            </div>
+            
         </div>
     </section>
 
@@ -1718,12 +1748,12 @@
             <div class="contact-card fade-up">
                 <div class="contact-icon">📍</div>
                 <h4>Address</h4>
-                <p>123 Style Avenue<br>Premium City, PC 12345</p>
+                <p>Bonifacio St., Brgy. East Ormoc City.</p>
             </div>
             <div class="contact-card fade-up">
                 <div class="contact-icon">📞</div>
                 <h4>Phone</h4>
-                <p><a href="tel:+1234567890" style="color: #6B7280; text-decoration: none;">+1 (234) 567-890</a></p>
+                <p><a href="tel:+1234567890" style="color: #6B7280; text-decoration: none;">0966-853-2418, 0910-244-4878, 0953-245-4819</a></p>
             </div>
             <div class="contact-card fade-up">
                 <div class="contact-icon">⏱️</div>
@@ -1746,7 +1776,7 @@
     <footer>
         <div class="footer-container">
             <div class="footer-section">
-                <h4>Prime Cuts</h4>
+                <h4>Glosh Beauty Salon</h4>
                 <p style="font-size: 0.95rem; color: #9CA3AF;">Premium salon & barbershop delivering excellence in grooming since 2014.</p>
             </div>
             <div class="footer-section">
@@ -1777,7 +1807,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Prime Cuts. All rights reserved. | <a href="#" style="color: #9CA3AF;">Privacy Policy</a> | <a href="#" style="color: #9CA3AF;">Terms of Service</a></p>
+            <p>&copy; 2024 Glosh Beauty Salon. All rights reserved. | <a href="#" style="color: #9CA3AF;">Privacy Policy</a> | <a href="#" style="color: #9CA3AF;">Terms of Service</a></p>
         </div>
     </footer>
 
@@ -1974,14 +2004,14 @@
                 const messageBox = document.createElement('div');
                 messageBox.style.cssText = `
                     padding: 1.25rem;
-                    background: ${response.ok ? 'linear-gradient(135deg, #F233C2 0%, #E91F96 100%)' : '#fee2e2'};
-                    color: ${response.ok ? 'white' : '#991b1b'};
+                    background: ₱{response.ok ? 'linear-gradient(135deg, #F233C2 0%, #E91F96 100%)' : '#fee2e2'};
+                    color: ₱{response.ok ? 'white' : '#991b1b'};
                     border-radius: 0.6rem;
                     text-align: center;
                     margin-bottom: 1.5rem;
                     animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
                 `;
-                messageBox.innerHTML = `<p style="font-weight: 700; font-size: 1rem; margin: 0;">${result.message || 'Appointment request received.'}</p>`;
+                messageBox.innerHTML = `<p style="font-weight: 700; font-size: 1rem; margin: 0;">₱{result.message || 'Appointment request received.'}</p>`;
 
                 const existingMessage = form.parentElement.querySelector('.booking-response');
                 if (existingMessage) {
