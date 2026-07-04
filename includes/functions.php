@@ -99,6 +99,45 @@ function logActivity(PDO $db, ?int $userId, string $action): void
 }
 
 /**
+ * Determine the inventory status label from available quantity.
+ */
+function inventoryStatusForQuantity(int $quantity, int $minimumStock): string
+{
+    if ($quantity <= 0) {
+        return 'Out of Stock';
+    }
+
+    if ($quantity <= $minimumStock) {
+        return 'Low Stock';
+    }
+
+    return 'In Stock';
+}
+
+/**
+ * Record inventory-related activity for the admin/staff activity log page.
+ */
+function logInventoryActivity(PDO $db, ?int $userId, ?string $role, string $action, ?string $description = null, ?string $ipAddress = null): void
+{
+    $stmt = $db->prepare("INSERT INTO inventory_logs (user_id, role, action, description, ip_address) VALUES (?, ?, ?, ?, ?)");
+    $stmt->execute([$userId, $role, $action, $description, $ipAddress]);
+}
+
+/**
+ * Get the caller IP address.
+ */
+function getClientIp(): string
+{
+    foreach (['HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR'] as $key) {
+        if (!empty($_SERVER[$key])) {
+            return (string) $_SERVER[$key];
+        }
+    }
+
+    return 'unknown';
+}
+
+/**
  * Format a date for display.
  */
 function formatDate(?string $date): string

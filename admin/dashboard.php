@@ -11,6 +11,13 @@ $approved = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = '
 $rejected = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'rejected'")->fetchColumn();
 $services = (int) $db->query("SELECT COUNT(*) FROM services WHERE is_active = 1")->fetchColumn();
 $staff    = (int) $db->query("SELECT COUNT(*) FROM users WHERE role = 'staff'")->fetchColumn();
+$inventoryItems = (int) $db->query("SELECT COUNT(*) FROM inventory WHERE deleted_at IS NULL")->fetchColumn();
+$lowStockItems = (int) $db->query("SELECT COUNT(*) FROM inventory WHERE deleted_at IS NULL AND status = 'Low Stock'")->fetchColumn();
+$outOfStockItems = (int) $db->query("SELECT COUNT(*) FROM inventory WHERE deleted_at IS NULL AND status = 'Out of Stock'")->fetchColumn();
+$pendingInventoryRequests = (int) $db->query("SELECT COUNT(*) FROM inventory_requests WHERE status = 'pending'")->fetchColumn();
+$approvedInventoryToday = (int) $db->query("SELECT COUNT(*) FROM inventory_requests WHERE status = 'approved' AND DATE(approved_at) = CURDATE()")->fetchColumn();
+$rejectedInventoryToday = (int) $db->query("SELECT COUNT(*) FROM inventory_requests WHERE status = 'rejected' AND DATE(updated_at) = CURDATE()")->fetchColumn();
+$inventoryActivityRows = $db->query("SELECT il.*, u.first_name, u.last_name FROM inventory_logs il LEFT JOIN users u ON u.id = il.user_id ORDER BY il.created_at DESC LIMIT 6")->fetchAll();
 
 // Recent appointments
 $recent = $db->query("
@@ -84,6 +91,29 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 </div>
 
+<div class="stats-grid">
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">📦</div>
+        <div class="stat-card-value"><?= $inventoryItems ?></div>
+        <div class="stat-card-label">Total Inventory Items</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">⚠️</div>
+        <div class="stat-card-value"><?= $lowStockItems ?></div>
+        <div class="stat-card-label">Low Stock Items</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">🚫</div>
+        <div class="stat-card-value"><?= $outOfStockItems ?></div>
+        <div class="stat-card-label">Out of Stock Items</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">🧾</div>
+        <div class="stat-card-value"><?= $pendingInventoryRequests ?></div>
+        <div class="stat-card-label">Pending Inventory Requests</div>
+    </div>
+</div>
+
 <div class="grid-2">
     <div class="card fade-up">
         <div class="card-header"><h3>Appointment Status</h3></div>
@@ -144,21 +174,40 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 </div>
 
-<div class="card fade-up">
-    <div class="card-header"><h3>Recent Activity</h3></div>
-    <?php if (empty($activities)): ?>
-        <div class="empty-state"><p>No activity recorded yet.</p></div>
-    <?php else: ?>
-        <?php foreach ($activities as $act): ?>
-        <div class="activity-item">
-            <div class="activity-dot"></div>
-            <div>
-                <div class="activity-text"><?= e($act['action']) ?></div>
-                <div class="activity-time"><?= e($act['first_name'] ? $act['first_name'] . ' ' . $act['last_name'] : 'System') ?> — <?= date('M d, Y g:i A', strtotime($act['created_at'])) ?></div>
+<div class="grid-2">
+    <div class="card fade-up">
+        <div class="card-header"><h3>Recent Activity</h3></div>
+        <?php if (empty($activities)): ?>
+            <div class="empty-state"><p>No activity recorded yet.</p></div>
+        <?php else: ?>
+            <?php foreach ($activities as $act): ?>
+            <div class="activity-item">
+                <div class="activity-dot"></div>
+                <div>
+                    <div class="activity-text"><?= e($act['action']) ?></div>
+                    <div class="activity-time"><?= e($act['first_name'] ? $act['first_name'] . ' ' . $act['last_name'] : 'System') ?> — <?= date('M d, Y g:i A', strtotime($act['created_at'])) ?></div>
+                </div>
             </div>
-        </div>
-        <?php endforeach; ?>
-    <?php endif; ?>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+
+    <div class="card fade-up">
+        <div class="card-header"><h3>Recent Inventory Activity</h3></div>
+        <?php if (empty($inventoryActivityRows)): ?>
+            <div class="empty-state"><p>No inventory activity yet.</p></div>
+        <?php else: ?>
+            <?php foreach ($inventoryActivityRows as $act): ?>
+            <div class="activity-item">
+                <div class="activity-dot"></div>
+                <div>
+                    <div class="activity-text"><?= e($act['action']) ?> — <?= e($act['description'] ?? '') ?></div>
+                    <div class="activity-time"><?= e($act['first_name'] ? $act['first_name'] . ' ' . $act['last_name'] : 'System') ?> — <?= date('M d, Y g:i A', strtotime($act['created_at'])) ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 </div>
 
 <script>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prime Cuts - Premium Salon & Barbershop</title>
+    <title>Glosh Beauty Salon</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -82,6 +82,20 @@
             font-size: 1.125rem;
             line-height: 1.75;
             color: #6B7280;
+        }
+
+        /* Icon base — used everywhere emoji used to be */
+        .icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 0;
+        }
+
+        .icon svg {
+            width: 1em;
+            height: 1em;
+            display: block;
         }
 
         /* Navbar */
@@ -238,6 +252,64 @@
             color: white;
             transform: translateY(-3px);
             box-shadow: 0 12px 30px rgba(242, 51, 194, 0.25);
+        }
+
+        /* Hamburger toggle (hidden on desktop) */
+        .nav-toggle {
+            display: none;
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 0.4rem;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            flex-shrink: 0;
+            transition: background 0.3s ease;
+        }
+
+        .nav-toggle:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .nav-toggle .bar {
+            width: 22px;
+            height: 2.5px;
+            background: white;
+            border-radius: 2px;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+        }
+
+        .nav-toggle.open .bar:nth-child(1) {
+            transform: translateY(7.5px) rotate(45deg);
+        }
+
+        .nav-toggle.open .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.open .bar:nth-child(3) {
+            transform: translateY(-7.5px) rotate(-45deg);
+        }
+
+        .nav-scrim {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 20, 25, 0.35);
+            z-index: 45;
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .nav-scrim.open {
+            display: block;
+            opacity: 1;
+            pointer-events: auto;
         }
 
         /* Hero Section */
@@ -627,7 +699,7 @@
 
         .overview-card p {
             font-size: 1rem;
-            color: #9CA3AF;
+            color: #0F1419;
         }
 
         /* Services Grid */
@@ -697,7 +769,13 @@
             justify-content: center;
             margin-bottom: 1.5rem;
             font-size: 1.6rem;
+            color: var(--primary);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .service-icon svg {
+            width: 26px;
+            height: 26px;
         }
 
         .service-card:hover .service-icon {
@@ -766,6 +844,12 @@
         .feature-icon {
             font-size: 2.5rem;
             margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-icon svg {
+            width: 42px;
+            height: 42px;
         }
 
         .feature-card h4 {
@@ -857,6 +941,12 @@
             transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
             border: 1px solid rgba(242, 51, 194, 0.1);
         }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
 
         .gallery-item:hover {
             transform: translateY(-8px) scale(1.02);
@@ -865,7 +955,7 @@
         }
 
         .gallery-item.tall {
-            grid-row: span 2;
+            grid-row: span 1;
         }
 
         .gallery-item.wide {
@@ -883,6 +973,11 @@
             font-size: 2rem;
             transition: opacity 0.3s ease;
             color: white;
+        }
+
+        .gallery-overlay svg {
+            width: 34px;
+            height: 34px;
         }
 
         .gallery-item:hover .gallery-overlay {
@@ -1013,6 +1108,12 @@
         .contact-icon {
             font-size: 2rem;
             margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .contact-icon svg {
+            width: 34px;
+            height: 34px;
         }
 
         .contact-card h4 {
@@ -1044,6 +1145,11 @@
             color: var(--primary);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-size: 1.1rem;
+        }
+
+        .social-link svg {
+            width: 19px;
+            height: 19px;
         }
 
         .social-link:hover {
@@ -1104,6 +1210,62 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            /* Hamburger takes over for tablet + mobile; desktop design untouched */
+            .nav-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100vh;
+                width: min(78vw, 320px);
+                background: linear-gradient(160deg, #F233C2 0%, #E91F96 100%);
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-start;
+                gap: 0;
+                padding: 6rem 2rem 2rem;
+                transform: translateX(100%);
+                transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+                box-shadow: -20px 0 60px rgba(15, 20, 25, 0.25);
+                z-index: 46;
+            }
+
+            .nav-links.open {
+                transform: translateX(0);
+            }
+
+            .nav-links li {
+                width: 100%;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+                margin-top: 1.5rem;
+            }
+
+            .nav-links a {
+                display: block;
+                width: 100%;
+                padding: 1.1rem 0;
+                font-size: 1.05rem;
+            }
+
+            .nav-links a::after {
+                display: none;
+            }
+
+            .nav-links a.cta-button {
+                width: 100%;
+                text-align: center;
+                padding: 0.9rem 1.4rem;
+            }
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2.2rem;
@@ -1120,11 +1282,6 @@
 
             .hero-visual {
                 height: 280px;
-            }
-
-            .nav-links {
-                gap: 1.2rem;
-                font-size: 0.9rem;
             }
 
             section {
@@ -1167,11 +1324,6 @@
         }
 
         @media (max-width: 640px) {
-            .nav-links {
-                gap: 0.8rem;
-                font-size: 0.8rem;
-            }
-
             .logo {
                 font-size: 1.2rem;
             }
@@ -1442,7 +1594,14 @@
     <nav id="navbar">
         <div class="nav-container">
             <a href="#home" class="logo"><img src="glossom-logo.png" alt="Glossom Logo" height="40px" width="40px"></a>
-            <ul class="nav-links">
+
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navLinks">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </button>
+
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
                 <li><a href="#gallery" class="nav-link">Gallery</a></li>
@@ -1451,13 +1610,15 @@
             </ul>
         </div>
     </nav>
+    <div class="nav-scrim" id="navScrim"></div>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
         <div class="hero-container">
             <div class="hero-content">
-                <h1 class="hero-headline">Premium Haircuts Crafted With Style</h1>
-                <p>Experience the art of professional grooming. Our skilled stylists bring precision, passion, and personality to every cut.</p>
+                <img src="glossom-logo.png" alt="Glosh Beauty Salon" height="100px" width="100px" class="logo-image">
+                <h1 class="hero-headline">Glosh Beauty Salon</h1>
+                <p>Experience the art of professional beauty and grooming. Our skilled stylists bring precision, passion, and personality to every service.</p>
                 <div class="hero-buttons">
                     <button class="cta-button" onclick="scrollToSection('#appointment')">Book Appointment</button>
                     <button class="secondary-button" onclick="scrollToSection('#services')">View Services</button>
@@ -1475,7 +1636,7 @@
     <section id="overview" class="alt-bg">
         <div class="section-header">
             <h2>Why Our Clients Love Us</h2>
-            <p>Setting the standard for premium barbershop experience since 2014</p>
+            <p>Setting the standard for premium barbershop experience</p>
         </div>
         <div class="overview-grid">
             <div class="overview-card fade-up">
@@ -1509,40 +1670,52 @@
         </div>
         <div class="services-grid">
             <div class="service-card fade-up">
-                <div class="service-icon">✂️</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.5 7.5L20 20M20 4L8.5 16.5"/></svg>
+                </div>
                 <h4>Premium Haircut</h4>
                 <p>Classic cuts, fades, and modern styles executed with precision</p>
-                <div class="service-price">$35</div>
+                <div class="service-price">₱350</div>
             </div>
             <div class="service-card fade-up">
-                <div class="service-icon">🎨</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3C7 3 3 6.8 3 11.5 3 16 6.5 19 11 19c.6 0 1-.4 1-1 0-.3-.1-.5-.3-.7-.2-.2-.3-.5-.3-.8 0-.6.4-1 1-1h1.6c2.8 0 5-2.2 5-5C19 5.9 15.9 3 12 3z"/><circle cx="7.5" cy="10.5" r="1"/><circle cx="11" cy="7.5" r="1"/><circle cx="15" cy="8.5" r="1"/><circle cx="16.5" cy="12.5" r="1"/></svg>
+                </div>
                 <h4>Hair Coloring</h4>
                 <p>Expert color treatment for transformation and confidence</p>
-                <div class="service-price">$45</div>
+                <div class="service-price">₱450</div>
             </div>
             <div class="service-card fade-up">
-                <div class="service-icon">💆</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s5 5.5 5 10a5 5 0 0 1-10 0c0-4.5 5-10 5-10z"/></svg>
+                </div>
                 <h4>Hair Treatment</h4>
                 <p>Deep conditioning and rejuvenation for healthy hair</p>
-                <div class="service-price">$50</div>
+                <div class="service-price">₱500</div>
             </div>
             <div class="service-card fade-up">
-                <div class="service-icon">🧔</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10V8a4 4 0 0 1 8 0v2"/><path d="M6 10h12l-1 6.5A4 4 0 0 1 13 20h-2a4 4 0 0 1-4-3.5L6 10z"/><path d="M9.5 14.5c0 1 .7 1.5 1.2 2M14.5 14.5c0 1-.7 1.5-1.2 2"/></svg>
+                </div>
                 <h4>Beard Grooming</h4>
                 <p>Precision beard trim, shaping, and care</p>
-                <div class="service-price">$25</div>
+                <div class="service-price">₱350</div>
             </div>
             <div class="service-card fade-up">
-                <div class="service-icon">💇</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4c3 2 5 5 5 9v7"/><path d="M20 4c-3 2-5 5-5 9v7"/><path d="M9 20h6"/><path d="M6 8h1.5M6 11h2M6 14h2.5M18 8h-1.5M18 11h-2M18 14h-2.5"/></svg>
+                </div>
                 <h4>Hair Styling</h4>
                 <p>Professional styling for special occasions</p>
-                <div class="service-price">$40</div>
+                <div class="service-price">₱400</div>
             </div>
             <div class="service-card fade-up">
-                <div class="service-icon">✨</div>
+                <div class="service-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 4.7L18.5 9l-4.7 1.8L12 15.5l-1.8-4.7L5.5 9l4.7-1.3L12 3z"/><path d="M18.5 15.5l.9 2.3 2.3.9-2.3.9-.9 2.3-.9-2.3-2.3-.9 2.3-.9.9-2.3z"/></svg>
+                </div>
                 <h4>Premium Package</h4>
                 <p>Complete grooming experience with consultation</p>
-                <div class="service-price">$85</div>
+                <div class="service-price">₱1250</div>
             </div>
         </div>
     </section>
@@ -1550,37 +1723,49 @@
     <!-- Why Choose Us -->
     <section id="why" class="alt-bg">
         <div class="section-header">
-            <h2>Why Choose Prime Cuts</h2>
+            <h2>Why Choose Glosh Beauty Salon</h2>
             <p>Excellence in every detail</p>
         </div>
         <div class="features-grid">
             <div class="feature-card fade-up">
-                <div class="feature-icon">👨‍💼</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.5 3.1-6 7-6s7 2.5 7 6"/></svg>
+                </div>
                 <h4>Experienced Barbers</h4>
                 <p>Highly trained professionals with years of expertise</p>
             </div>
             <div class="feature-card fade-up">
-                <div class="feature-icon">🏆</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M9 12.5L7 21l5-2.5L17 21l-2-8.5"/></svg>
+                </div>
                 <h4>Premium Products</h4>
                 <p>Only the finest grooming products from top brands</p>
             </div>
             <div class="feature-card fade-up">
-                <div class="feature-icon">💰</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l4 4v6a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7z"/><path d="M16 7V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v2"/><circle cx="8.5" cy="14.5" r="1.5"/></svg>
+                </div>
                 <h4>Affordable Pricing</h4>
                 <p>Premium quality without breaking the bank</p>
             </div>
             <div class="feature-card fade-up">
-                <div class="feature-icon">🏪</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l8-5 8 5v10a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9z"/><path d="M9 20v-6h6v6"/></svg>
+                </div>
                 <h4>Clean Environment</h4>
                 <p>Immaculate facilities and strict hygiene standards</p>
             </div>
             <div class="feature-card fade-up">
-                <div class="feature-icon">🎯</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></svg>
+                </div>
                 <h4>Personalized Styling</h4>
                 <p>Custom recommendations for your unique look</p>
             </div>
             <div class="feature-card fade-up">
-                <div class="feature-icon">⏰</div>
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+                </div>
                 <h4>Quick Turnaround</h4>
                 <p>Efficient service without compromising quality</p>
             </div>
@@ -1621,26 +1806,49 @@
         </div>
         <div class="gallery-grid">
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh1.jpg" alt="Gallery image" />
             </div>
             <div class="gallery-item tall">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh2.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh3.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh4.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
             <div class="gallery-item wide">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh5.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh6.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
             <div class="gallery-item">
-                <div class="gallery-overlay">👁️</div>
+                <img src="glosh7.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
             </div>
+            <div class="gallery-item">
+                <img src="glosh8.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            </div>
+            <div class="gallery-item">
+                <img src="glosh9.jpg" alt="Gallery image" />
+
+                <div class="gallery-overlay"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+            </div>
+            
         </div>
     </section>
 
@@ -1716,27 +1924,27 @@
         </div>
         <div class="contact-grid">
             <div class="contact-card fade-up">
-                <div class="contact-icon">📍</div>
+                <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
                 <h4>Address</h4>
-                <p>123 Style Avenue<br>Premium City, PC 12345</p>
+                <p>Bonifacio St., Brgy. East Ormoc City.</p>
             </div>
             <div class="contact-card fade-up">
-                <div class="contact-icon">📞</div>
+                <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h3.5l1.5 4-2 1.5a11 11 0 0 0 5.5 5.5l1.5-2 4 1.5V18a2 2 0 0 1-2 2C10.5 20 4 13.5 4 6a2 2 0 0 1 1-2z"/></svg></div>
                 <h4>Phone</h4>
-                <p><a href="tel:+1234567890" style="color: #6B7280; text-decoration: none;">+1 (234) 567-890</a></p>
+                <p><a href="tel:+1234567890" style="color: #6B7280; text-decoration: none;">0966-853-2418, 0910-244-4878, 0953-245-4819</a></p>
             </div>
             <div class="contact-card fade-up">
-                <div class="contact-icon">⏱️</div>
+                <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg></div>
                 <h4>Business Hours</h4>
                 <p>Mon - Fri: 9:00 AM - 8:00 PM<br>Sat: 10:00 AM - 6:00 PM<br>Sun: Closed</p>
             </div>
             <div class="contact-card fade-up">
-                <div class="contact-icon">🌐</div>
+                <div class="contact-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 3.5 6 3.5 9s-1 6.5-3.5 9c-2.5-2.5-3.5-6-3.5-9s1-6.5 3.5-9z"/></svg></div>
                 <h4>Follow Us</h4>
                 <div class="social-links">
-                    <a href="#" class="social-link" title="Facebook">f</a>
-                    <a href="#" class="social-link" title="Instagram">📷</a>
-                    <a href="#" class="social-link" title="Google Maps">📍</a>
+                    <a href="#" class="social-link" title="Facebook" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h-2a2 2 0 0 0-2 2v2H9v3h2v6h3v-6h2.2l.8-3H14v-1.5c0-.6.4-1 1-1h1.5V8z"/></svg></a>
+                    <a href="#" class="social-link" title="Instagram" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/><circle cx="16.2" cy="7.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+                    <a href="#" class="social-link" title="Google Maps" aria-label="Google Maps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/></svg></a>
                 </div>
             </div>
         </div>
@@ -1746,7 +1954,7 @@
     <footer>
         <div class="footer-container">
             <div class="footer-section">
-                <h4>Prime Cuts</h4>
+                <h4>Glosh Beauty Salon</h4>
                 <p style="font-size: 0.95rem; color: #9CA3AF;">Premium salon & barbershop delivering excellence in grooming since 2014.</p>
             </div>
             <div class="footer-section">
@@ -1770,14 +1978,14 @@
             <div class="footer-section">
                 <h4>Follow Us</h4>
                 <div class="social-links">
-                    <a href="#" class="social-link">f</a>
-                    <a href="#" class="social-link">📷</a>
-                    <a href="#" class="social-link">🐦</a>
+                    <a href="#" class="social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 8h-2a2 2 0 0 0-2 2v2H9v3h2v6h3v-6h2.2l.8-3H14v-1.5c0-.6.4-1 1-1h1.5V8z"/></svg></a>
+                    <a href="#" class="social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><circle cx="12" cy="12" r="3.5"/><circle cx="16.2" cy="7.8" r="0.6" fill="currentColor" stroke="none"/></svg></a>
+                    <a href="#" class="social-link" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5.5c-.7.4-1.5.7-2.3.8.8-.5 1.4-1.3 1.7-2.2-.8.5-1.6.8-2.6 1a3.7 3.7 0 0 0-6.3 3.4C8.7 8.2 6 6.8 4.1 4.5c-.4.7-.6 1.4-.6 2.2 0 1.6.8 2.9 2 3.8-.7 0-1.4-.2-2-.5 0 2.2 1.6 4 3.6 4.4-.4.1-.8.2-1.2.2-.3 0-.6 0-.8-.1.6 1.8 2.2 3 4.2 3.1A7.6 7.6 0 0 1 3 19.4a10.7 10.7 0 0 0 5.8 1.7c7 0 10.8-5.8 10.8-10.8v-.5c.7-.5 1.4-1.2 1.9-2z"/></svg></a>
                 </div>
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2024 Prime Cuts. All rights reserved. | <a href="#" style="color: #9CA3AF;">Privacy Policy</a> | <a href="#" style="color: #9CA3AF;">Terms of Service</a></p>
+            <p>&copy; 2024 Glosh Beauty Salon. All rights reserved. | <a href="#" style="color: #9CA3AF;">Privacy Policy</a> | <a href="#" style="color: #9CA3AF;">Terms of Service</a></p>
         </div>
     </footer>
 
@@ -1792,6 +2000,43 @@
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Hamburger menu toggle (mobile / tablet)
+        const navToggle = document.getElementById('navToggle');
+        const navLinksEl = document.getElementById('navLinks');
+        const navScrim = document.getElementById('navScrim');
+
+        function openMenu() {
+            navToggle.classList.add('open');
+            navLinksEl.classList.add('open');
+            navScrim.classList.add('open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMenu() {
+            navToggle.classList.remove('open');
+            navLinksEl.classList.remove('open');
+            navScrim.classList.remove('open');
+            navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
+        }
+
+        navToggle.addEventListener('click', () => {
+            if (navLinksEl.classList.contains('open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        });
+
+        navScrim.addEventListener('click', closeMenu);
+
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 1024) {
+                closeMenu();
             }
         });
 
@@ -1829,6 +2074,16 @@
                 e.preventDefault();
                 const href = link.getAttribute('href');
                 scrollToSection(href);
+                closeMenu();
+            });
+        });
+
+        // Book Now button in the menu also closes the drawer on click
+        document.querySelectorAll('.nav-links .cta-button').forEach((btn) => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                scrollToSection('#appointment');
+                closeMenu();
             });
         });
 
@@ -2042,5 +2297,6 @@
                 transform: translateY(-20px);
             }
         }
+    </style>
 </body>
 </html>
