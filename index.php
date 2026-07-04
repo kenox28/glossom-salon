@@ -2,12 +2,10 @@
 require_once __DIR__ . '/includes/functions.php';
 initSession();
 
-if (!isLoggedIn()) {
-    redirect(url('login.php'));
-}
-
 if (hasRole('admin')) {
     redirect(url('admin/dashboard.php'));
+} elseif (hasRole('staff')) {
+    redirect(url('staff/dashboard.php'));
 }
 ?>
 <!DOCTYPE html>

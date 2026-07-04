@@ -1,8 +1,6 @@
 <?php
-require_once __DIR__ . '/../includes/functions.php';
-
-initSession();
-redirect(url('index.php'));
+require_once __DIR__ . '/../middleware/auth.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 $db = getDB();
 

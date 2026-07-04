@@ -1,79 +1,32 @@
-<?php
-require_once __DIR__ . '/includes/functions.php';
-redirect(url('login.php'));
-?>
-<?php
-require_once __DIR__ . '/includes/functions.php';
-initSession();
-
-if (!isLoggedIn()) {
-    redirect(url('login.php'));
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossom Salon</title>
+    <title>Prime Cuts - Premium Salon & Barbershop</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Poppins & Inter Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- SplitType -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/split-type@0.3.2/dist/index.js"></script>
+
     <style>
-        :root {
-            --primary: #F233C2;
-            --dark: #1F2937;
-            --white: #FFFFFF;
-        }
-
-        body {
+        * {
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #fff5fc, #ffffff);
-            color: var(--dark);
-            min-height: 100vh;
-            display: grid;
-            place-items: center;
+            padding: 0;
+            box-sizing: border-box;
         }
-
-        .card {
-            background: var(--white);
-            padding: 2rem 2.5rem;
-            border-radius: 16px;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-            text-align: center;
-            max-width: 480px;
-            width: 90%;
-        }
-
-        h1 {
-            margin-bottom: 0.75rem;
-            color: var(--dark);
-        }
-
-        p {
-            margin-bottom: 1.5rem;
-            line-height: 1.6;
-            color: #4b5563;
-        }
-
-        .btn {
-            display: inline-block;
-            background: var(--primary);
-            color: var(--white);
-            text-decoration: none;
-            padding: 0.8rem 1.2rem;
-            border-radius: 999px;
-            font-weight: 600;
-        }
-    </style>
-</head>
-<body>
-    <div class="card">
-        <h1>Welcome to Glossom Salon</h1>
-        <p>You are now logged in to the site.</p>
-        <a class="btn" href="<?= url('logout.php') ?>">Logout</a>
-    </div>
-</body>
-</html>
-<?php exit; ?>
 
         :root {
             --primary: #F233C2;
@@ -1700,47 +1653,53 @@ if (!isLoggedIn()) {
             <form id="bookingForm" onsubmit="handleFormSubmit(event)">
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="firstName">First Name</label>
-                        <input type="text" id="firstName" name="firstName" placeholder="John" required>
+                        <label for="first_name">First Name</label>
+                        <input type="text" id="first_name" name="first_name" placeholder="John" required>
                     </div>
                     <div class="form-group">
-                        <label for="lastName">Last Name</label>
-                        <input type="text" id="lastName" name="lastName" placeholder="Doe" required>
+                        <label for="last_name">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" placeholder="Doe" required>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="john@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="(234) 567-890" required>
+                    </div>
                 </div>
 
-                <div class="services-checkbox-group">
-                    <label>Select Services</label>
-                    <div class="checkbox-list">
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service1" name="services" value="Premium Haircut">
-                            <label for="service1">Premium Haircut</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service2" name="services" value="Hair Coloring">
-                            <label for="service2">Hair Coloring</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service3" name="services" value="Hair Treatment">
-                            <label for="service3">Hair Treatment</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service4" name="services" value="Beard Grooming">
-                            <label for="service4">Beard Grooming</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service5" name="services" value="Hair Styling">
-                            <label for="service5">Hair Styling</label>
-                        </div>
-                        <div class="checkbox-item">
-                            <input type="checkbox" id="service6" name="services" value="Premium Package">
-                            <label for="service6">Premium Package</label>
-                        </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="service_id">Service</label>
+                        <select id="service_id" name="service_id" required>
+                            <option value="">Select a service</option>
+                            <option value="1">Premium Haircut</option>
+                            <option value="2">Hair Coloring</option>
+                            <option value="3">Hair Treatment</option>
+                            <option value="4">Beard Grooming</option>
+                            <option value="5">Hair Styling</option>
+                            <option value="6">Premium Package</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="preferred_date">Preferred Date</label>
+                        <input type="date" id="preferred_date" name="preferred_date" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="preferred_time">Preferred Time</label>
+                        <input type="time" id="preferred_time" name="preferred_time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" placeholder="Tell us about your preferred look or any special requests"></textarea>
                     </div>
                 </div>
 
@@ -1980,45 +1939,84 @@ if (!isLoggedIn()) {
         }
 
         // Form submission handler
-        function handleFormSubmit(event) {
+        async function handleFormSubmit(event) {
             event.preventDefault();
-            
-            const firstName = document.getElementById('firstName').value;
-            const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
-            const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
-                .map(cb => cb.value);
 
-            if (services.length === 0) {
-                alert('Please select at least one service');
+            const form = document.getElementById('bookingForm');
+            const submitButton = form.querySelector('button[type="submit"]');
+            const payload = {
+                first_name: document.getElementById('first_name').value.trim(),
+                last_name: document.getElementById('last_name').value.trim(),
+                email: document.getElementById('email').value.trim(),
+                phone: document.getElementById('phone').value.trim(),
+                service_id: parseInt(document.getElementById('service_id').value, 10),
+                preferred_date: document.getElementById('preferred_date').value,
+                preferred_time: document.getElementById('preferred_time').value,
+                notes: document.getElementById('notes').value.trim()
+            };
+
+            if (!payload.first_name || !payload.last_name || !payload.email || !payload.phone || !payload.service_id || !payload.preferred_date || !payload.preferred_time) {
+                alert('Please fill in all required appointment details.');
                 return;
             }
 
-            // Show success message
-            const form = document.getElementById('bookingForm');
-            const successMessage = document.createElement('div');
-            successMessage.style.cssText = `
-                padding: 1.5rem;
-                background: linear-gradient(135deg, #F233C2 0%, #E91F96 100%);
-                color: white;
-                border-radius: 0.6rem;
-                text-align: center;
-                margin-bottom: 1.5rem;
-                animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            `;
-            successMessage.innerHTML = `
-                <p style="font-weight: 700; font-size: 1.1rem; margin: 0;">✓ Appointment Request Received!</p>
-                <p style="margin: 0.5rem 0 0 0; color: rgba(255, 255, 255, 0.9);">We'll contact you at ${email} to confirm.</p>
-            `;
+            submitButton.disabled = true;
+            submitButton.textContent = 'Submitting...';
 
-            form.parentElement.insertBefore(successMessage, form);
-            form.reset();
+            try {
+                const response = await fetch('api/book.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
 
-            // Remove success message after 5 seconds
-            setTimeout(() => {
-                successMessage.style.animation = 'slideUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards';
-                setTimeout(() => successMessage.remove(), 500);
-            }, 5000);
+                const messageBox = document.createElement('div');
+                messageBox.style.cssText = `
+                    padding: 1.25rem;
+                    background: ${response.ok ? 'linear-gradient(135deg, #F233C2 0%, #E91F96 100%)' : '#fee2e2'};
+                    color: ${response.ok ? 'white' : '#991b1b'};
+                    border-radius: 0.6rem;
+                    text-align: center;
+                    margin-bottom: 1.5rem;
+                    animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+                `;
+                messageBox.innerHTML = `<p style="font-weight: 700; font-size: 1rem; margin: 0;">${result.message || 'Appointment request received.'}</p>`;
+
+                const existingMessage = form.parentElement.querySelector('.booking-response');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+
+                messageBox.className = 'booking-response';
+                form.parentElement.insertBefore(messageBox, form);
+
+                if (response.ok) {
+                    form.reset();
+                }
+            } catch (error) {
+                const messageBox = document.createElement('div');
+                messageBox.className = 'booking-response';
+                messageBox.style.cssText = `
+                    padding: 1.25rem;
+                    background: #fee2e2;
+                    color: #991b1b;
+                    border-radius: 0.6rem;
+                    text-align: center;
+                    margin-bottom: 1.5rem;
+                    animation: slideDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+                `;
+                messageBox.innerHTML = '<p style="font-weight: 700; font-size: 1rem; margin: 0;">Unable to submit your request right now. Please try again.</p>';
+
+                const existingMessage = form.parentElement.querySelector('.booking-response');
+                if (existingMessage) {
+                    existingMessage.remove();
+                }
+                form.parentElement.insertBefore(messageBox, form);
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Book Appointment';
+            }
         }
     </script>
 
