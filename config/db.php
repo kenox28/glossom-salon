@@ -16,11 +16,20 @@ function initializeDatabaseSchema(PDO $pdo): void
         CREATE TABLE IF NOT EXISTS activity_logs (
             id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id INT UNSIGNED NULL,
+            role VARCHAR(20) NULL,
             action TEXT NOT NULL,
+            appointment_id INT UNSIGNED NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
+    $activityColumns = $pdo->query("SHOW COLUMNS FROM activity_logs")->fetchAll(PDO::FETCH_COLUMN);
+    if (!in_array('role', $activityColumns, true)) {
+        $pdo->exec("ALTER TABLE activity_logs ADD COLUMN role VARCHAR(20) NULL AFTER user_id");
+    }
+    if (!in_array('appointment_id', $activityColumns, true)) {
+        $pdo->exec("ALTER TABLE activity_logs ADD COLUMN appointment_id INT UNSIGNED NULL AFTER action");
+    }
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS inventory_categories (
@@ -82,6 +91,17 @@ function initializeDatabaseSchema(PDO $pdo): void
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     ");
+
+    $appointmentColumns = $pdo->query("SHOW COLUMNS FROM appointments")->fetchAll(PDO::FETCH_COLUMN);
+    if (!in_array('completed_at', $appointmentColumns, true)) {
+        $pdo->exec("ALTER TABLE appointments ADD COLUMN completed_at TIMESTAMP NULL DEFAULT NULL AFTER approved_time");
+    }
+    if (!in_array('completed_by', $appointmentColumns, true)) {
+        $pdo->exec("ALTER TABLE appointments ADD COLUMN completed_by INT UNSIGNED NULL AFTER completed_at");
+    }
+    if (!in_array('done', array_map('strtolower', $pdo->query("SELECT SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE)-6) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'appointments' AND COLUMN_NAME = 'status'")->fetchAll(PDO::FETCH_COLUMN)), true)) {
+        $pdo->exec("ALTER TABLE appointments MODIFY status ENUM('pending','approved','rejected','done') NOT NULL DEFAULT 'pending'");
+    }
 
     $categoryCheck = $pdo->prepare("SELECT COUNT(*) FROM inventory_categories");
     $categoryCheck->execute();

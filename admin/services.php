@@ -68,7 +68,7 @@ function openServiceModal(data = null) {
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label>Price ($)</label>
+                    <label>Price (₱)</label>
                     <input type="number" name="price" class="form-control" step="0.01" min="0" required value="${isEdit ? data.price : ''}">
                 </div>
                 <div class="form-group">

@@ -8,27 +8,43 @@ require_once __DIR__ . '/../includes/csrf.php';
 
 $db = getDB();
 
+$pendingAppointments = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'pending'")->fetchColumn();
+$approvedAppointments = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'approved'")->fetchColumn();
+$rejectedAppointments = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'rejected'")->fetchColumn();
+$completedAppointments = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'done'")->fetchColumn();
 $totalAppts  = (int) $db->query("SELECT COUNT(*) FROM appointments")->fetchColumn();
 $totalRevenue = $db->query("
     SELECT COALESCE(SUM(s.price), 0) FROM appointments a
-    JOIN services s ON s.id = a.service_id WHERE a.status = 'approved'
+    JOIN services s ON s.id = a.service_id WHERE a.status = 'done'
 ")->fetchColumn();
-
+$todayRevenue = $db->query("
+    SELECT COALESCE(SUM(s.price), 0) FROM appointments a
+    JOIN services s ON s.id = a.service_id WHERE a.status = 'done' AND DATE(a.completed_at) = CURDATE()
+")->fetchColumn();
+$monthlyRevenue = $db->query("
+    SELECT COALESCE(SUM(s.price), 0) FROM appointments a
+    JOIN services s ON s.id = a.service_id WHERE a.status = 'done' AND DATE(a.completed_at) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+")->fetchColumn();
 $topServices = $db->query("
     SELECT s.service_name, COUNT(*) as bookings, SUM(s.price) as revenue
     FROM appointments a JOIN services s ON s.id = a.service_id
-    WHERE a.status = 'approved'
+    WHERE a.status = 'done'
     GROUP BY s.id ORDER BY bookings DESC LIMIT 5
 ")->fetchAll();
 
 $monthlyRev = $db->query("
-    SELECT DATE_FORMAT(a.approved_date, '%b') as month,
-           DATE_FORMAT(a.approved_date, '%Y-%m') as sort_key,
+    SELECT DATE_FORMAT(a.completed_at, '%b') as month,
+           DATE_FORMAT(a.completed_at, '%Y-%m') as sort_key,
            COALESCE(SUM(s.price), 0) as revenue
     FROM appointments a JOIN services s ON s.id = a.service_id
-    WHERE a.status = 'approved' AND a.approved_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+    WHERE a.status = 'done' AND a.completed_at >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
     GROUP BY sort_key, month ORDER BY sort_key ASC
 ")->fetchAll();
+
+$mostRequestedService = $db->query("
+    SELECT s.service_name FROM appointments a JOIN services s ON s.id = a.service_id
+    WHERE a.status = 'done' GROUP BY s.id ORDER BY COUNT(*) DESC LIMIT 1
+")->fetchColumn();
 
 $pageTitle  = 'Reports';
 $activePage = 'reports';
@@ -39,16 +55,22 @@ require_once __DIR__ . '/../includes/navbar.php';
 ?>
 
 <div class="stats-grid">
-    <div class="stat-card fade-up">
-        <div class="stat-card-icon">📊</div>
-        <div class="stat-card-value"><?= $totalAppts ?></div>
-        <div class="stat-card-label">Total Appointments</div>
-    </div>
-    <div class="stat-card fade-up">
-        <div class="stat-card-icon">💰</div>
-        <div class="stat-card-value"><?= formatPrice((float) $totalRevenue) ?></div>
-        <div class="stat-card-label">Total Revenue (Approved)</div>
-    </div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">📊</div><div class="stat-card-value"><?= $totalAppts ?></div><div class="stat-card-label">Total Appointments</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">⏳</div><div class="stat-card-value"><?= $pendingAppointments ?></div><div class="stat-card-label">Pending Appointments</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">✅</div><div class="stat-card-value"><?= $approvedAppointments ?></div><div class="stat-card-label">Approved Appointments</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">❌</div><div class="stat-card-value"><?= $rejectedAppointments ?></div><div class="stat-card-label">Rejected Appointments</div></div>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card fade-up"><div class="stat-card-icon">🏁</div><div class="stat-card-value"><?= $completedAppointments ?></div><div class="stat-card-label">Completed Appointments</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">💰</div><div class="stat-card-value"><?= formatPrice((float) $totalRevenue) ?></div><div class="stat-card-label">Total Revenue</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">📅</div><div class="stat-card-value"><?= formatPrice((float) $todayRevenue) ?></div><div class="stat-card-label">Today's Revenue</div></div>
+    <div class="stat-card fade-up"><div class="stat-card-icon">📈</div><div class="stat-card-value"><?= formatPrice((float) $monthlyRevenue) ?></div><div class="stat-card-label">Monthly Revenue</div></div>
+</div>
+
+<div class="card fade-up" style="margin-bottom:1.5rem;">
+    <div class="card-header"><h3>Most Requested Service</h3></div>
+    <div class="empty-state" style="padding:1.2rem 0;"><p><?= e($mostRequestedService ?: 'No completed appointments yet') ?></p></div>
 </div>
 
 <div class="grid-2">
@@ -83,7 +105,7 @@ new Chart(document.getElementById('revenueChart'), {
     type: 'line',
     data: {
         labels: <?= json_encode(array_column($monthlyRev, 'month')) ?>,
-        datasets: [{ label: 'Revenue ($)', data: <?= json_encode(array_column($monthlyRev, 'revenue')) ?>, borderColor: '#F233C2', backgroundColor: 'rgba(242,51,194,0.1)', fill: true, tension: 0.4 }]
+        datasets: [{ label: 'Revenue (₱)', data: <?= json_encode(array_column($monthlyRev, 'revenue')) ?>, borderColor: '#F233C2', backgroundColor: 'rgba(242,51,194,0.1)', fill: true, tension: 0.4 }]
     },
     options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
 });

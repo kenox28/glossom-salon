@@ -6,9 +6,11 @@ $db = getDB();
 $user = currentUser();
 
 $pending  = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'pending'")->fetchColumn();
-$approved = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'approved' AND approved_date = CURDATE()")->fetchColumn();
+$approved = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'approved'")->fetchColumn();
+$completed = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'done'")->fetchColumn();
 $rejected = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'rejected'")->fetchColumn();
 $services = (int) $db->query("SELECT COUNT(*) FROM services WHERE is_active = 1")->fetchColumn();
+$totalRevenue = (float) $db->query("SELECT COALESCE(SUM(s.price), 0) FROM appointments a JOIN services s ON s.id = a.service_id WHERE a.status = 'done'")->fetchColumn();
 $pendingInventoryQuery = $db->prepare("SELECT COUNT(*) FROM inventory_requests WHERE status = 'pending' AND staff_id = ?");
 $pendingInventoryQuery->execute([$user['id']]);
 $pendingInventoryRequests = (int) $pendingInventoryQuery->fetchColumn();
@@ -58,17 +60,22 @@ require_once __DIR__ . '/../includes/navbar.php';
     <div class="stat-card fade-up">
         <div class="stat-card-icon">✅</div>
         <div class="stat-card-value"><?= $approved ?></div>
-        <div class="stat-card-label">Approved Today</div>
+        <div class="stat-card-label">Approved Appointments</div>
     </div>
     <div class="stat-card fade-up">
-        <div class="stat-card-icon">❌</div>
-        <div class="stat-card-value"><?= $rejected ?></div>
-        <div class="stat-card-label">Rejected</div>
+        <div class="stat-card-icon">🏁</div>
+        <div class="stat-card-value"><?= $completed ?></div>
+        <div class="stat-card-label">Completed Appointments</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">💰</div>
+        <div class="stat-card-value"><?= formatPrice($totalRevenue) ?></div>
+        <div class="stat-card-label">Total Revenue</div>
     </div>
     <div class="stat-card fade-up">
         <div class="stat-card-icon">✂️</div>
         <div class="stat-card-value"><?= $services ?></div>
-        <div class="stat-card-label">Active Services</div>
+        <div class="stat-card-label">Total Services</div>
     </div>
 </div>
 

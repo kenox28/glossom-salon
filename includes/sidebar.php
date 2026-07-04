@@ -24,7 +24,7 @@ $navItems = [
     <div class="sidebar-header">
         <a href="<?= url('index.php') ?>" class="sidebar-logo">
             <img src="<?= url('assets/images/glossom-logo.png') ?>" alt="Logo" width="36" height="36">
-            <span>Glossom</span>
+            <span>Glosh Beauty salon</span>
         </a>
         <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">☰</button>
     </div>

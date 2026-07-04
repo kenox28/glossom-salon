@@ -68,7 +68,7 @@ switch ($action) {
         $appointment['approved_date'] = $approvedDate;
         $appointment['approved_time'] = $approvedTime;
 
-        logActivity($db, $user['id'], "Approved appointment #{$id} for {$appointment['first_name']} {$appointment['last_name']}");
+        logActivity($db, $user['id'], "Approved appointment #{$id} for {$appointment['first_name']} {$appointment['last_name']}", $user['role'] ?? null, $id);
 
         // Send confirmation email
         $service = ['service_name' => $appointment['service_name']];
@@ -92,13 +92,31 @@ switch ($action) {
         ");
         $update->execute([$reason ?: null, $user['id'], $id]);
 
-        logActivity($db, $user['id'], "Rejected appointment #{$id} for {$appointment['first_name']} {$appointment['last_name']}");
+        logActivity($db, $user['id'], "Rejected appointment #{$id} for {$appointment['first_name']} {$appointment['last_name']}", $user['role'] ?? null, $id);
 
         // Send rejection email
         $html = buildRejectedEmail($appointment, $reason ?: null);
         sendEmail($appointment['email'], 'Appointment Update — ' . SALON_NAME, $html);
 
         jsonResponse(['success' => true, 'message' => 'Appointment rejected and notification email sent.']);
+        break;
+
+    case 'complete':
+        if ($appointment['status'] !== 'approved') {
+            jsonResponse(['success' => false, 'message' => 'Only approved appointments can be marked as done.'], 422);
+        }
+
+        $update = $db->prepare("
+            UPDATE appointments
+            SET status = 'done', completed_at = NOW(), completed_by = ?, updated_at = NOW()
+            WHERE id = ?
+        ");
+        $update->execute([$user['id'], $id]);
+
+        logActivity($db, $user['id'], "Completed appointment #{$id} for {$appointment['first_name']} {$appointment['last_name']}", $user['role'] ?? null, $id);
+        logActivity($db, $user['id'], "Revenue recorded for appointment #{$id}", $user['role'] ?? null, $id);
+
+        jsonResponse(['success' => true, 'message' => 'Appointment marked as completed.']);
         break;
 
     default:

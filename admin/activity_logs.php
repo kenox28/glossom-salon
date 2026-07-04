@@ -3,7 +3,7 @@ require_once __DIR__ . '/../middleware/auth.php';
 require_once __DIR__ . '/../includes/csrf.php';
 
 $db = getDB();
-$logs = $db->query("SELECT il.*, u.first_name, u.last_name, u.role AS user_role FROM inventory_logs il LEFT JOIN users u ON u.id = il.user_id ORDER BY il.created_at DESC LIMIT 100")->fetchAll();
+$logs = $db->query("SELECT al.*, u.first_name, u.last_name, u.role AS user_role FROM activity_logs al LEFT JOIN users u ON u.id = al.user_id ORDER BY al.created_at DESC LIMIT 100")->fetchAll();
 
 $pageTitle = 'Activity Logs';
 $activePage = 'activity_logs';
@@ -22,7 +22,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <div class="empty-state"><div class="empty-state-icon">📝</div><p>No activity recorded yet.</p></div>
         <?php else: ?>
             <table class="data-table">
-                <thead><tr><th>Date</th><th>User</th><th>Role</th><th>Action</th><th>Description</th><th>IP Address</th></tr></thead>
+                <thead><tr><th>Date</th><th>User</th><th>Role</th><th>Action</th><th>Appointment ID</th></tr></thead>
                 <tbody>
                 <?php foreach ($logs as $log): ?>
                     <tr>
@@ -30,8 +30,7 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <td><?= e(trim(($log['first_name'] ?? '') . ' ' . ($log['last_name'] ?? ''))) ?: 'System' ?></td>
                         <td><?= e($log['role'] ?? $log['user_role'] ?? 'system') ?></td>
                         <td><?= e($log['action']) ?></td>
-                        <td><?= e($log['description'] ?? '—') ?></td>
-                        <td><?= e($log['ip_address'] ?? '—') ?></td>
+                        <td><?= $log['appointment_id'] ? (int) $log['appointment_id'] : '—' ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

@@ -92,10 +92,10 @@ function hasRole(string $role): bool
 /**
  * Log an activity to the database.
  */
-function logActivity(PDO $db, ?int $userId, string $action): void
+function logActivity(PDO $db, ?int $userId, string $action, ?string $role = null, ?int $appointmentId = null): void
 {
-    $stmt = $db->prepare("INSERT INTO activity_logs (user_id, action) VALUES (?, ?)");
-    $stmt->execute([$userId, $action]);
+    $stmt = $db->prepare("INSERT INTO activity_logs (user_id, role, action, appointment_id) VALUES (?, ?, ?, ?)");
+    $stmt->execute([$userId, $role, $action, $appointmentId]);
 }
 
 /**
@@ -160,7 +160,7 @@ function formatTime(?string $time): string
  */
 function formatPrice(float $price): string
 {
-    return '$' . number_format($price, 2);
+    return '₱' . number_format($price, 2);
 }
 
 /**
@@ -172,6 +172,7 @@ function statusBadge(string $status): string
         'pending'  => 'badge-pending',
         'approved' => 'badge-approved',
         'rejected' => 'badge-rejected',
+        'done'     => 'badge-done',
     ];
     $class = $classes[$status] ?? 'badge-pending';
     return '<span class="badge ' . $class . '">' . e(ucfirst($status)) . '</span>';

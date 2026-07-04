@@ -11,7 +11,7 @@ $basePath = preg_replace('#/(admin|staff|api)$#', '', $basePath);
 $basePath = rtrim($basePath, '/');
 $basePath = $basePath === '.' ? '' : $basePath;
 
-define('APP_NAME', 'Glossom Salon');
+define('APP_NAME', 'Glosh Beauty Salon');
 define('APP_URL', rtrim($scheme . '://' . $host . $basePath, '/') . '/');
 define('SESSION_TIMEOUT', 1800); // 30 minutes in seconds
 define('CSRF_TOKEN_NAME', '_csrf_token');

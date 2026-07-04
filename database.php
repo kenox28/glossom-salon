@@ -72,9 +72,11 @@ try {
             service_id      INT UNSIGNED NOT NULL,
             preferred_date  DATE         NOT NULL,
             preferred_time  TIME         NOT NULL,
-            status          ENUM('pending','approved','rejected') NOT NULL DEFAULT 'pending',
+            status          ENUM('pending','approved','rejected','done') NOT NULL DEFAULT 'pending',
             approved_date   DATE         NULL,
             approved_time   TIME         NULL,
+            completed_at    TIMESTAMP    NULL DEFAULT NULL,
+            completed_by    INT UNSIGNED NULL,
             handled_by      INT UNSIGNED NULL,
             notes           TEXT         NULL,
             rejection_reason TEXT        NULL,
@@ -91,7 +93,9 @@ try {
         CREATE TABLE IF NOT EXISTS activity_logs (
             id         INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
             user_id    INT UNSIGNED NULL,
+            role       VARCHAR(20) NULL,
             action     TEXT NOT NULL,
+            appointment_id INT UNSIGNED NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -222,7 +226,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossom Salon — Database Setup</title>
+    <title>Glosh Beauty Salon — Database Setup</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: #FAFAFA; color: #1F2937; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
@@ -237,7 +241,7 @@ try {
 </head>
 <body>
     <div class="card">
-        <h1>Glossom Salon — Database Setup</h1>
+        <h1>Glosh Beauty Salon — Database Setup</h1>
         <p class="sub">Automatic database initialization</p>
         <?php foreach ($messages as $msg): ?>
             <div class="msg success"><?= htmlspecialchars($msg) ?></div>

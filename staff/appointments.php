@@ -10,7 +10,7 @@ $page   = max(1, (int) ($_GET['page'] ?? 1));
 
 $where  = '';
 $params = [];
-if (in_array($status, ['pending', 'approved', 'rejected'])) {
+if (in_array($status, ['pending', 'approved', 'rejected', 'done'])) {
     $where  = 'WHERE a.status = ?';
     $params = [$status];
 }
@@ -18,7 +18,7 @@ if (in_array($status, ['pending', 'approved', 'rejected'])) {
 $result = paginate(
     $db,
     "SELECT COUNT(*) FROM appointments a {$where}",
-    "SELECT a.*, s.service_name, u.first_name as handler_first, u.last_name as handler_last
+    "SELECT a.*, s.service_name, s.price, u.first_name as handler_first, u.last_name as handler_last
      FROM appointments a
      JOIN services s ON s.id = a.service_id
      LEFT JOIN users u ON u.id = a.handled_by
@@ -44,6 +44,7 @@ require_once __DIR__ . '/../includes/navbar.php';
             <a href="?status=pending" class="btn btn-sm <?= $status === 'pending' ? 'btn-primary' : 'btn-secondary' ?>">Pending</a>
             <a href="?status=approved" class="btn btn-sm <?= $status === 'approved' ? 'btn-primary' : 'btn-secondary' ?>">Approved</a>
             <a href="?status=rejected" class="btn btn-sm <?= $status === 'rejected' ? 'btn-primary' : 'btn-secondary' ?>">Rejected</a>
+            <a href="?status=done" class="btn btn-sm <?= $status === 'done' ? 'btn-primary' : 'btn-secondary' ?>">Done</a>
         </div>
     </div>
 
@@ -54,7 +55,7 @@ require_once __DIR__ . '/../includes/navbar.php';
         <table class="data-table">
             <thead>
                 <tr>
-                    <th>Customer</th><th>Service</th><th>Preferred</th><th>Status</th><th>Submitted</th><th>Actions</th>
+                    <th>Customer</th><th>Service</th><th>Appointment</th><th>Price</th><th>Status</th><th>Assigned Staff</th><th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -65,9 +66,13 @@ require_once __DIR__ . '/../includes/navbar.php';
                         <small style="color:#9CA3AF;"><?= e($appt['email']) ?> · <?= e($appt['phone']) ?></small>
                     </td>
                     <td><?= e($appt['service_name']) ?></td>
-                    <td><?= formatDate($appt['preferred_date']) ?><br><small><?= formatTime($appt['preferred_time']) ?></small></td>
+                    <td>
+                        <?= formatDate($appt['status'] === 'pending' ? $appt['preferred_date'] : ($appt['approved_date'] ?? $appt['preferred_date'])) ?><br>
+                        <small><?= formatTime($appt['status'] === 'pending' ? $appt['preferred_time'] : ($appt['approved_time'] ?? $appt['preferred_time'])) ?></small>
+                    </td>
+                    <td><?= formatPrice((float) $appt['price']) ?></td>
                     <td><?= statusBadge($appt['status']) ?></td>
-                    <td><?= formatDate($appt['created_at']) ?></td>
+                    <td><?= $appt['handler_first'] ? e($appt['handler_first'] . ' ' . $appt['handler_last']) : '—' ?></td>
                     <td>
                         <?php if ($appt['status'] === 'pending'): ?>
                         <div class="btn-group">
@@ -75,7 +80,11 @@ require_once __DIR__ . '/../includes/navbar.php';
                             <button class="btn btn-danger btn-sm" onclick="rejectAppointment(<?= $appt['id'] ?>)">Reject</button>
                         </div>
                         <?php elseif ($appt['status'] === 'approved'): ?>
-                            <small><?= formatDate($appt['approved_date']) ?> <?= formatTime($appt['approved_time']) ?></small>
+                        <div class="btn-group">
+                            <button class="btn btn-success btn-sm" onclick="completeAppointment(<?= $appt['id'] ?>)">Done</button>
+                        </div>
+                        <?php elseif ($appt['status'] === 'done'): ?>
+                            <small>Completed <?= formatDate($appt['completed_at']) ?></small>
                         <?php else: ?>—<?php endif; ?>
                     </td>
                 </tr>

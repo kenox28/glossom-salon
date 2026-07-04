@@ -205,6 +205,35 @@ function submitReject(e, id) {
     .catch(() => showToast('Something went wrong.', 'error'));
 }
 
+function completeAppointment(id) {
+    openModal('Complete Appointment', `
+        <p style="margin-bottom:1.5rem;color:#6B7280;">Are you sure you want to mark this appointment as completed?</p>
+        <div class="btn-group">
+            <button class="btn btn-success" onclick="submitComplete(${id})">Confirm</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+        </div>
+    `);
+}
+
+function submitComplete(id) {
+    fetch(getApiUrl('appointments.php'), {
+        method: 'POST',
+        headers: csrfHeaders(),
+        body: JSON.stringify({ action: 'complete', id: id }),
+    })
+    .then(r => r.json())
+    .then(res => {
+        closeModal();
+        if (res.success) {
+            showToast(res.message, 'success');
+            setTimeout(() => location.reload(), 1200);
+        } else {
+            showToast(res.message, 'error');
+        }
+    })
+    .catch(() => showToast('Something went wrong.', 'error'));
+}
+
 /* ── Delete confirmation ──────────────────────────────────── */
 function confirmDelete(message, callback) {
     openModal('Confirm Delete', `

@@ -13,7 +13,7 @@ if (hasRole('admin')) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Glossom Salon</title>
+    <title>Glosh Beauty Salon</title>
     <style>
         :root {
             --primary: #F233C2;
@@ -65,7 +65,7 @@ if (hasRole('admin')) {
 </head>
 <body>
     <div class="card">
-        <h1>Welcome to Glossom Salon</h1>
+        <h1>Welcome to Glosh Beauty Salon</h1>
         <p>You are now logged in to the site.</p>
         <a class="btn" href="<?= url('logout.php') ?>">Logout</a>
     </div>
@@ -1488,7 +1488,7 @@ if (hasRole('admin')) {
     <!-- Navigation -->
     <nav id="navbar">
         <div class="nav-container">
-            <a href="#home" class="logo"><img src="assets/images/glossom-logo.png" alt="Glossom Logo" height="40px" width="40px"></a>
+            <a href="#home" class="logo"><img src="assets/images/glosh-beauty-salon-logo.png" alt="Glosh Beauty Salon Logo" height="40px" width="40px"></a>
             <ul class="nav-links">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
@@ -1559,37 +1559,37 @@ if (hasRole('admin')) {
                 <div class="service-icon">✂️</div>
                 <h4>Premium Haircut</h4>
                 <p>Classic cuts, fades, and modern styles executed with precision</p>
-                <div class="service-price">$35</div>
+                <div class="service-price">₱35</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">🎨</div>
                 <h4>Hair Coloring</h4>
                 <p>Expert color treatment for transformation and confidence</p>
-                <div class="service-price">$45</div>
+                <div class="service-price">₱45</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">💆</div>
                 <h4>Hair Treatment</h4>
                 <p>Deep conditioning and rejuvenation for healthy hair</p>
-                <div class="service-price">$50</div>
+                <div class="service-price">₱50</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">🧔</div>
                 <h4>Beard Grooming</h4>
                 <p>Precision beard trim, shaping, and care</p>
-                <div class="service-price">$25</div>
+                <div class="service-price">₱25</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">💇</div>
                 <h4>Hair Styling</h4>
                 <p>Professional styling for special occasions</p>
-                <div class="service-price">$40</div>
+                <div class="service-price">₱40</div>
             </div>
             <div class="service-card fade-up">
                 <div class="service-icon">✨</div>
                 <h4>Premium Package</h4>
                 <p>Complete grooming experience with consultation</p>
-                <div class="service-price">$85</div>
+                <div class="service-price">₱85</div>
             </div>
         </div>
     </section>
@@ -1597,7 +1597,7 @@ if (hasRole('admin')) {
     <!-- Why Choose Us -->
     <section id="why" class="alt-bg">
         <div class="section-header">
-            <h2>Why Choose Glossom</h2>
+            <h2>Why Choose Glosh Beauty Salon</h2>
             <p>Excellence in every detail</p>
         </div>
         <div class="features-grid">
@@ -1726,7 +1726,7 @@ if (hasRole('admin')) {
                         <option value="">Choose a service...</option>
                         <?php foreach ($servicesList as $svc): ?>
                         <option value="<?= (int) $svc['id'] ?>">
-                            <?= e($svc['service_name']) ?> — $<?= number_format((float) $svc['price'], 2) ?> (<?= (int) $svc['duration'] ?> min)
+                            <?= e($svc['service_name']) ?> — ₱<?= number_format((float) $svc['price'], 2) ?> (<?= (int) $svc['duration'] ?> min)
                         </option>
                         <?php endforeach; ?>
                     </select>
@@ -1791,7 +1791,7 @@ if (hasRole('admin')) {
     <footer>
         <div class="footer-container">
             <div class="footer-section">
-                <h4>Glossom Salon</h4>
+                <h4>Glosh Beauty Salon</h4>
                 <p style="font-size: 0.95rem; color: #9CA3AF;">Premium salon & barbershop delivering excellence in grooming since 2014.</p>
             </div>
             <div class="footer-section">
@@ -1822,7 +1822,7 @@ if (hasRole('admin')) {
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; <?= date('Y') ?> Glossom Salon. All rights reserved. | <a href="<?= url('login.php') ?>" style="color: #9CA3AF;">Staff Login</a></p>
+            <p>&copy; <?= date('Y') ?> Glosh Beauty Salon. All rights reserved. | <a href="<?= url('login.php') ?>" style="color: #9CA3AF;">Staff Login</a></p>
         </div>
     </footer>
 
