@@ -10,7 +10,7 @@ initSession();
 
 // Redirect if already logged in
 if (isLoggedIn()) {
-    $dest = hasRole('admin') ? url('admin/dashboard.php') : url('index.php');
+    $dest = hasRole('admin') ? url('admin/dashboard.php') : url('staff/dashboard.php');
     redirect($dest);
 }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $dest = $role === 'admin'
                 ? url('admin/dashboard.php')
-                : url('index.php');
+                : url('staff/dashboard.php');
             redirect($dest);
         } else {
             $error = 'Invalid username or password.';

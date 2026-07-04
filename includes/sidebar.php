@@ -8,13 +8,16 @@ $role = $user['role'];
 $prefix = $role === 'admin' ? 'admin' : 'staff';
 
 $navItems = [
-    ['id' => 'dashboard',    'label' => 'Dashboard',    'icon' => '📊', 'href' => url("{$prefix}/dashboard.php"),    'roles' => ['admin', 'staff']],
-    ['id' => 'appointments', 'label' => 'Appointments', 'icon' => '📅', 'href' => url("{$prefix}/appointments.php"), 'roles' => ['admin', 'staff']],
-    ['id' => 'services',     'label' => 'Services',     'icon' => '✂️', 'href' => url("{$prefix}/services.php"),     'roles' => ['admin', 'staff']],
-    ['id' => 'staff',        'label' => 'Manage Staff', 'icon' => '👥', 'href' => url('admin/staff.php'),            'roles' => ['admin']],
-    ['id' => 'reports',      'label' => 'Reports',      'icon' => '📈', 'href' => url('admin/reports.php'),          'roles' => ['admin']],
-    ['id' => 'settings',     'label' => 'Settings',     'icon' => '⚙️', 'href' => url('admin/settings.php'),         'roles' => ['admin']],
-    ['id' => 'profile',      'label' => 'Profile',      'icon' => '👤', 'href' => url("{$prefix}/profile.php"),      'roles' => ['admin', 'staff']],
+    ['id' => 'dashboard',            'label' => 'Dashboard',            'icon' => '📊', 'href' => url("{$prefix}/dashboard.php"),            'roles' => ['admin', 'staff']],
+    ['id' => 'appointments',         'label' => 'Appointments',         'icon' => '📅', 'href' => url("{$prefix}/appointments.php"),         'roles' => ['admin', 'staff']],
+    ['id' => 'services',             'label' => 'Services',             'icon' => '✂️', 'href' => url("{$prefix}/services.php"),             'roles' => ['admin', 'staff']],
+    ['id' => 'inventory',            'label' => $role === 'admin' ? 'Inventory' : 'Inventory', 'icon' => '📦', 'href' => url("{$prefix}/inventory.php"), 'roles' => ['admin', 'staff']],
+    ['id' => 'inventory_requests',   'label' => $role === 'admin' ? 'Inventory Requests' : 'Request Inventory', 'icon' => $role === 'admin' ? '🧾' : '🛒', 'href' => url("{$prefix}/" . ($role === 'admin' ? 'inventory_requests.php' : 'inventory_requests.php')), 'roles' => ['admin', 'staff']],
+    ['id' => 'activity_logs',        'label' => 'Activity Logs',        'icon' => '📝', 'href' => url("{$prefix}/activity_logs.php"),        'roles' => ['admin', 'staff']],
+    ['id' => 'staff',                'label' => 'Manage Staff',         'icon' => '👥', 'href' => url('admin/staff.php'),                  'roles' => ['admin']],
+    ['id' => 'reports',              'label' => 'Reports',              'icon' => '📈', 'href' => url('admin/reports.php'),                'roles' => ['admin']],
+    ['id' => 'settings',             'label' => 'Settings',             'icon' => '⚙️', 'href' => url('admin/settings.php'),               'roles' => ['admin']],
+    ['id' => 'profile',              'label' => 'Profile',              'icon' => '👤', 'href' => url("{$prefix}/profile.php"),            'roles' => ['admin', 'staff']],
 ];
 ?>
 <aside class="sidebar" id="sidebar">

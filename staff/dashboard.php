@@ -1,15 +1,24 @@
 <?php
-require_once __DIR__ . '/../includes/functions.php';
-
-initSession();
-redirect(url('index.php'));
+require_once __DIR__ . '/../middleware/auth.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 $db = getDB();
+$user = currentUser();
 
 $pending  = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'pending'")->fetchColumn();
 $approved = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'approved' AND approved_date = CURDATE()")->fetchColumn();
 $rejected = (int) $db->query("SELECT COUNT(*) FROM appointments WHERE status = 'rejected'")->fetchColumn();
 $services = (int) $db->query("SELECT COUNT(*) FROM services WHERE is_active = 1")->fetchColumn();
+$pendingInventoryQuery = $db->prepare("SELECT COUNT(*) FROM inventory_requests WHERE status = 'pending' AND staff_id = ?");
+$pendingInventoryQuery->execute([$user['id']]);
+$pendingInventoryRequests = (int) $pendingInventoryQuery->fetchColumn();
+$approvedInventoryQuery = $db->prepare("SELECT COUNT(*) FROM inventory_requests WHERE status = 'approved' AND staff_id = ?");
+$approvedInventoryQuery->execute([$user['id']]);
+$approvedInventoryRequests = (int) $approvedInventoryQuery->fetchColumn();
+$availableInventory = (int) $db->query("SELECT COUNT(*) FROM inventory WHERE deleted_at IS NULL AND stock_quantity > 0")->fetchColumn();
+$recentRequestsStmt = $db->prepare("SELECT ir.*, i.item_name FROM inventory_requests ir JOIN inventory i ON i.id = ir.item_id WHERE ir.staff_id = ? ORDER BY ir.created_at DESC LIMIT 4");
+$recentRequestsStmt->execute([$user['id']]);
+$recentRequests = $recentRequestsStmt->fetchAll();
 
 $recent = $db->query("
     SELECT a.*, s.service_name FROM appointments a
@@ -63,6 +72,29 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 </div>
 
+<div class="stats-grid">
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">🛒</div>
+        <div class="stat-card-value"><?= $pendingInventoryRequests ?></div>
+        <div class="stat-card-label">Pending Requests</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">✅</div>
+        <div class="stat-card-value"><?= $approvedInventoryRequests ?></div>
+        <div class="stat-card-label">Approved Requests</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">📦</div>
+        <div class="stat-card-value"><?= $availableInventory ?></div>
+        <div class="stat-card-label">Available Inventory</div>
+    </div>
+    <div class="stat-card fade-up">
+        <div class="stat-card-icon">🧾</div>
+        <div class="stat-card-value"><?= count($recentRequests) ?></div>
+        <div class="stat-card-label">Recent Requests</div>
+    </div>
+</div>
+
 <div class="grid-2">
     <div class="card fade-up">
         <div class="card-header">
@@ -108,17 +140,36 @@ require_once __DIR__ . '/../includes/navbar.php';
     </div>
 </div>
 
-<div class="card fade-up">
-    <div class="card-header"><h3>Recent Activity</h3></div>
-    <?php foreach ($activities as $act): ?>
-    <div class="activity-item">
-        <div class="activity-dot"></div>
-        <div>
-            <div class="activity-text"><?= e($act['action']) ?></div>
-            <div class="activity-time"><?= date('M d, Y g:i A', strtotime($act['created_at'])) ?></div>
+<div class="grid-2">
+    <div class="card fade-up">
+        <div class="card-header"><h3>Recent Activity</h3></div>
+        <?php foreach ($activities as $act): ?>
+        <div class="activity-item">
+            <div class="activity-dot"></div>
+            <div>
+                <div class="activity-text"><?= e($act['action']) ?></div>
+                <div class="activity-time"><?= date('M d, Y g:i A', strtotime($act['created_at'])) ?></div>
+            </div>
         </div>
+        <?php endforeach; ?>
     </div>
-    <?php endforeach; ?>
+
+    <div class="card fade-up">
+        <div class="card-header"><h3>Recent Requests</h3></div>
+        <?php if (empty($recentRequests)): ?>
+            <div class="empty-state"><p>No requests yet.</p></div>
+        <?php else: ?>
+            <?php foreach ($recentRequests as $req): ?>
+            <div class="activity-item">
+                <div class="activity-dot"></div>
+                <div>
+                    <div class="activity-text"><?= e($req['item_name']) ?> — <?= e($req['purpose']) ?></div>
+                    <div class="activity-time"><?= e($req['status']) ?> — <?= formatDate($req['created_at']) ?></div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
 </div>
 
 <?php require_once __DIR__ . '/../includes/footer.php'; ?>
